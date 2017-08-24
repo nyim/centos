@@ -1,0 +1,77 @@
+--- uwsgi.spec	2017-08-24 10:01:51.018645893 +0800
++++ uwsgi.spec	2017-08-24 10:01:51.018645893 +0800
+@@ -841,20 +841,28 @@
+ This package contains the tornado plugin for uWSGI
+ 
+ %package -n %{name}-plugin-tornado3
+ Summary:  uWSGI - Plugin for Tornado/Python3 support
+ Group:    System Environment/Daemons
+ Requires: %{name}-plugin-common = %{version}-%{release}, python3-tornado
+ 
+ %description -n %{name}-plugin-tornado3
+ This package contains the tornado (python v3) plugin for uWSGI
+ 
++%package -n %{name}-plugin-gevent3
++Summary:  uWSGI - Plugin for GEvent support
++Group:    System Environment/Daemons
++Requires: %{name}-plugin-python3 = %{version}-%{release}, libevent
++
++%description -n %{name}-plugin-gevent3
++This package contains the gevent plugin for uWSGI
++
+ %package -n %{name}-plugin-ugreen
+ Summary:  uWSGI - Plugin for uGreen support
+ Group:    System Environment/Daemons
+ Requires: %{name}-plugin-common = %{version}-%{release}
+ 
+ %description -n %{name}-plugin-ugreen
+ This package contains the uGreen plugin for uWSGI
+ 
+ %if %{with v8}
+ %package -n %{name}-plugin-v8
+@@ -1140,20 +1148,21 @@
+ %endif
+ %if %{without mono}
+ sed -in "s/mono, //" buildconf/fedora.ini
+ %endif
+ 
+ 
+ %build
+ CFLAGS="%{optflags} -Wno-error -Wno-unused-but-set-variable" python uwsgiconfig.py --build fedora.ini
+ %if %{with python3}
+ CFLAGS="%{optflags} -Wno-unused-but-set-variable" %{__python3} uwsgiconfig.py --plugin plugins/python fedora python3
++CFLAGS="%{optflags} -Wno-unused-but-set-variable" %{__python3} uwsgiconfig.py --plugin plugins/gevent fedora gevent3
+ %if %{with tornado3}
+ CFLAGS="%{optflags} -Wno-unused-but-set-variable" %{__python3} uwsgiconfig.py --plugin plugins/tornado fedora tornado3
+ %endif
+ %endif
+ %if %{with mongodblibs}
+ CFLAGS="%{optflags} -Wno-unused-but-set-variable" python uwsgiconfig.py --plugin plugins/mongodblog fedora
+ CFLAGS="%{optflags} -Wno-unused-but-set-variable -std=gnu++11 -Wno-error" python uwsgiconfig.py --plugin plugins/stats_pusher_mongodb fedora
+ %endif
+ %if %{with mono}
+ CFLAGS="%{optflags} -Wno-unused-but-set-variable" python uwsgiconfig.py --plugin plugins/mono fedora
+@@ -1488,20 +1497,23 @@
+ %files -n %{name}-plugin-gccgo
+ %{_libdir}/%{name}/gccgo_plugin.so
+ %endif
+ 
+ %files -n %{name}-plugin-geoip
+ %{_libdir}/%{name}/geoip_plugin.so
+ 
+ %files -n %{name}-plugin-gevent
+ %{_libdir}/%{name}/gevent_plugin.so
+ 
++%files -n %{name}-plugin-gevent3
++%{_libdir}/%{name}/gevent3_plugin.so
++
+ %if %{with glusterfs}
+ %files -n %{name}-plugin-glusterfs
+ %{_libdir}/%{name}/glusterfs_plugin.so
+ %endif
+ 
+ %if %{with greenlet}
+ %files -n %{name}-plugin-greenlet
+ %{_libdir}/%{name}/greenlet_plugin.so
+ %endif
+ 
