@@ -1,5 +1,28 @@
---- uwsgi.spec	2017-08-24 10:01:51.018645893 +0800
-+++ uwsgi.spec	2017-08-24 10:01:51.018645893 +0800
+--- uwsgi-2.0.15.spec	2017-08-24 10:05:57.048147934 +0800
++++ uwsgi.spec	2017-08-25 12:49:53.907207712 +0800
+@@ -110,21 +110,21 @@
+ %endif
+ 
+ # Turn off byte compilation so it doesn't try
+ # to auto-optimize the code in /usr/src/uwsgi
+ %if %{manual_py_compile} == 1
+ %global __os_install_post %(echo '%{__os_install_post}' | sed -e 's!/usr/lib[^[:space:]]*/brp-python-bytecompile[[:space:]].*$!!g')
+ %endif
+ 
+ Name:           uwsgi
+ Version:        %{majornumber}.%{minornumber}.%{releasenumber}
+-Release:        1%{?dist}
++Release:        1.el7
+ Summary:        Fast, self-healing, application container server
+ Group:          System Environment/Daemons
+ License:        GPLv2 with exceptions
+ URL:            https://github.com/unbit/uwsgi
+ Source0:        http://projects.unbit.it/downloads/%{name}-%{version}.tar.gz
+ Source1:        fedora.ini
+ Source2:        uwsgi.service
+ Source3:        emperor.ini
+ Source4:        https://github.com/unbit/%{docrepo}/archive/%{commit}/%{docrepo}-%{shortcommit}.tar.gz
+ Source5:        README.Fedora
 @@ -841,20 +841,28 @@
  This package contains the tornado plugin for uWSGI
  
